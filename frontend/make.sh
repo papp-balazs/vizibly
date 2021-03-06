@@ -1,8 +1,8 @@
 #!/bin/bash
 DEBUG=true
 
-elm make src/Main.elm --output=./dist/bundle.js
+elm make src/Main.elm --output=./dist/scripts/bundle.js
 
 if ! $DEBUG; then
-	uglifyjs --compress --mangle --output ./dist/bundle.min.js -- ./dist/bundle.js
+	uglifyjs --compress --mangle --output ./dist/scripts/bundle.min.js -- ./dist/scripts/bundle.js
 fi

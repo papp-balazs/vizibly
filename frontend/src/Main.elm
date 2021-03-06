@@ -1,40 +1,106 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Browser
-import Html exposing (Html, button, div, text)
-import Html.Events exposing (onClick)
+import Browser exposing (UrlRequest(..))
+import Browser.Navigation
+import Html exposing (..)
+import Routing.Router as Router
+import SharedState exposing (SharedState, SharedStateUpdate(..), initialSharedState)
+import Url exposing (Url)
 
+main : Program Flags Model Msg
 main =
-    Browser.sandbox
+    Browser.application
         { init = init
         , update = update
         , view = view
+        , onUrlChange = UrlChange
+        , onUrlRequest = LinkClicked
+        , subscriptions = \_ -> Sub.none
         }
 
 type alias Model =
-    Int
+    { appState : AppState
+    , navKey : Browser.Navigation.Key
+    , url: Url
+    }
 
-init : Model
-init =
-    0
+type alias Flags =
+    {}
+
+type AppState
+    = NotReady
+    | Ready SharedState Router.Model
+    | FailedToInitialize
 
 type Msg
-    = Increment
-    | Decrement
+    = UrlChange Url
+    | LinkClicked UrlRequest
+    | RouterMsg Router.Msg
 
-update : Msg -> Model -> Model
+init : Flags -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
+init flags url navKey =
+    ( { appState =
+            Ready
+                (initialSharedState navKey)
+                (Router.initialModel url)
+      , url = url
+      , navKey = navKey
+      }
+    , Cmd.none
+    )
+
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Increment ->
-            model + 1
+        UrlChange url ->
+            updateRouter { model | url = url } (Router.UrlChange url)
 
-        Decrement ->
-            model - 1
+        RouterMsg routerMsg ->
+            updateRouter model routerMsg
 
-view : Model -> Html Msg
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Internal url ->
+                    ( model, Browser.Navigation.pushUrl model.navKey (Url.toString url) )
+
+                External url ->
+                    ( model, Browser.Navigation.load url )
+
+updateRouter : Model -> Router.Msg -> ( Model, Cmd Msg )
+updateRouter model routerMsg =
+    case model.appState of
+        Ready sharedState routerModel ->
+            let
+                nextSharedState =
+                    SharedState.update sharedState sharedStateUpdate
+
+                ( nextRouterModel, routerCmd, sharedStateUpdate ) =
+                    Router.update sharedState routerMsg routerModel
+            in
+                ( { model | appState = Ready nextSharedState nextRouterModel }
+                , Cmd.map RouterMsg routerCmd
+                )
+
+        _ ->
+            let
+                _ =
+                    Debug.log "We got a router message even though the app is not ready?"
+                        routerMsg
+            in
+                ( model, Cmd.none )
+
+view : Model -> Browser.Document Msg
 view model =
-    div []
-        [ button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt model) ]
-        , button [ onClick Increment ] [ text "+" ]
-        ]
+    case model.appState of
+        Ready sharedState routerModel ->
+            Router.view RouterMsg sharedState routerModel
+
+        NotReady ->
+            { title = "Vizibly"
+            , body = [ text "Loading" ]
+            }
+
+        FailedToInitialize ->
+            { title = "Failure"
+            , body = [ text "The application failed to initialize." ]
+            }
