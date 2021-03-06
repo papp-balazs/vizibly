@@ -95,7 +95,7 @@ view msgMapper sharedState model =
         title =
             case model.route of
                 HomeRoute ->
-                    ""
+                    "Vizibly"
 
                 SettingsRoute ->
                     "Settings"
@@ -110,7 +110,7 @@ view msgMapper sharedState model =
                 , pageView sharedState model
                 ]
     in
-        { title = "Vizibly"
+        { title = title
         , body = body_ |> Html.map msgMapper |> \x -> [ x ]
         }
 
