@@ -104,7 +104,7 @@ view msgMapper sharedState model =
                     "404"
 
         body_ =
-            div []
+            main_ []
                 [ a [ href "/" ] [ text "Home" ]
                 , a [ href "/settings" ] [ text "Settings" ]
                 , pageView sharedState model
@@ -116,16 +116,14 @@ view msgMapper sharedState model =
 
 pageView : SharedState -> Model -> Html Msg
 pageView sharedState model =
-    div []
-        [ case model.route of
-            HomeRoute ->
-                Pages.Home.view sharedState model.homeModel
-                    |> Html.map HomeMsg
+    case model.route of
+        HomeRoute ->
+            Pages.Home.view sharedState model.homeModel
+                |> Html.map HomeMsg
 
-            SettingsRoute ->
-                Pages.Settings.view sharedState model.settingsModel
-                    |> Html.map SettingsMsg
+        SettingsRoute ->
+            Pages.Settings.view sharedState model.settingsModel
+                |> Html.map SettingsMsg
 
-            NotFoundRoute ->
-                p [] [ text "There is no route like this" ]
-        ]
+        NotFoundRoute ->
+            p [] [ text "There is no route like this" ]
