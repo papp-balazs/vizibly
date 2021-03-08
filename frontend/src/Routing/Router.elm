@@ -60,7 +60,7 @@ update sharedState msg model =
     case msg of
         UrlChange location ->
             let
-                ( command ) =
+                command =
                     getRouteInitCommand (parseUrl location)
             in
                 ( { model | route = parseUrl location }

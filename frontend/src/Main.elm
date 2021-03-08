@@ -86,12 +86,7 @@ updateRouter model routerMsg =
                 )
 
         _ ->
-            let
-                _ =
-                    Debug.log "We got a router message even though the app is not ready?"
-                        routerMsg
-            in
-                ( model, Cmd.none )
+            ( model, Cmd.none )
 
 view : Model -> Browser.Document Msg
 view model =
