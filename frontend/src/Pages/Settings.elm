@@ -7,20 +7,21 @@ type alias Model =
     { currentUser : String }
 
 type Msg
-    = NoOp
+    = InitData
 
-init : ( Model, Cmd Msg )
+init :  Model
 init =
-    ( { currentUser = "" }
-    , Cmd.none
-    )
+    { currentUser = "" }
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none )
+        InitData ->
+            ( { model | currentUser = "pappbalazs" }, Cmd.none )
 
 view : SharedState -> Model -> Html Msg
 view sharedState model =
-    div [] [ text "This is the settings page." ]
+    div []
+        [ div [] [ text "This is the settings page." ]
+        , div [] [ text ("The current user is " ++ model.currentUser) ]
+        ]

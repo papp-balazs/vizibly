@@ -39,15 +39,19 @@ type Msg
 
 init : Flags -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
 init flags url navKey =
-    ( { appState =
-            Ready
-                (initialSharedState navKey)
-                (Router.initialModel url)
-      , url = url
-      , navKey = navKey
-      }
-    , Cmd.none
-    )
+    let
+        ( routerModel, routerCommand ) =
+            Router.init url
+    in
+        ( { appState =
+                Ready
+                    (initialSharedState navKey)
+                    routerModel
+          , navKey = navKey
+          , url = url
+          }
+        , Cmd.map RouterMsg routerCommand
+        )
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =

@@ -10,13 +10,10 @@ type alias Model =
 type Msg
     = Increment
     | Decrement
-    | NoOp
 
-init : ( Model, Cmd Msg )
+init : Model
 init =
-    ( { counter = 0 }
-    , Cmd.none
-    )
+    { counter = 0 }
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -26,9 +23,6 @@ update msg model =
 
         Decrement ->
             ( { model | counter = model.counter - 1 }, Cmd.none )
-
-        NoOp ->
-            ( model, Cmd.none )
 
 view : SharedState -> Model -> Html Msg
 view sharedState model =
