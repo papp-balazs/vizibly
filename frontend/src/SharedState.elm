@@ -15,15 +15,10 @@ type SharedStateUpdate
 
 initialSharedState : Browser.Navigation.Key -> String -> Maybe String -> SharedState
 initialSharedState navKey theme userToken =
-    let
-        _ = Debug.log "The nav key is" navKey
-        _ = Debug.log "The user token is" userToken
-        _ = Debug.log "The theme is" theme
-    in
-        { navKey = navKey
-        , theme = theme
-        , userToken = userToken
-        }
+    { navKey = navKey
+    , theme = theme
+    , userToken = userToken
+    }
 
 update : SharedState -> SharedStateUpdate -> SharedState
 update sharedState sharedStateUpdate =
