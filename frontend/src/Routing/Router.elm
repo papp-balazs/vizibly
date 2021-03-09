@@ -9,7 +9,7 @@ import SharedState exposing (SharedState, SharedStateUpdate(..))
 import Task
 import Url exposing (Url)
 import Html exposing (..)
-import Html.Attributes exposing (href)
+import Html.Attributes exposing (class, href)
 
 type alias Model =
     { homeModel : Pages.Home.Model
@@ -109,9 +109,9 @@ view msgMapper sharedState model =
 
                 NotFoundRoute ->
                     "404"
-
+        
         body_ =
-            main_ []
+            main_ [ class sharedState.theme ]
                 [ a [ href "/" ] [ text "Home" ]
                 , a [ href "/settings" ] [ text "Settings" ]
                 , pageView sharedState model

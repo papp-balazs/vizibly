@@ -9,7 +9,11 @@
 	<script src="./scripts/bundle.js"></script>
 	<script>
 		var app = Elm.Main.init({
-			node: document.getElementById("app")
+			node: document.getElementById("app"),
+			flags: {
+				theme: localStorage.getItem('__VIZIBLY_THEME__') || 'dark',
+				userToken: localStorage.getItem('__VIZIBLY_USER_TOKEN__') || null
+			}
 		});
 	</script>
 </body>

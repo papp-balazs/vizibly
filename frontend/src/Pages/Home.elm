@@ -26,8 +26,13 @@ update msg model =
 
 view : SharedState -> Model -> Html Msg
 view sharedState model =
-    div []
-        [ button [ onClick Increment ] [ text "+" ]
-        , p [] [ text (String.fromInt model.counter) ]
-        , button [ onClick Decrement ] [ text "-" ]
-        ]
+    case sharedState.userToken of
+        Just _ ->
+            text "You are authorized"
+
+        Nothing ->
+            div []
+                [ button [ onClick Increment ] [ text "+" ]
+                , p [] [ text (String.fromInt model.counter) ]
+                , button [ onClick Decrement ] [ text "-" ]
+                ]

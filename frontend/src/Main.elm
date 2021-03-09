@@ -25,7 +25,9 @@ type alias Model =
     }
 
 type alias Flags =
-    {}
+    { theme : String
+    , userToken : Maybe String
+    }
 
 type AppState
     = NotReady
@@ -45,7 +47,7 @@ init flags url navKey =
     in
         ( { appState =
                 Ready
-                    (initialSharedState navKey)
+                    (initialSharedState navKey flags.theme flags.userToken)
                     routerModel
           , navKey = navKey
           , url = url
