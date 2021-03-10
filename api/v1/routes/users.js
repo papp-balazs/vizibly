@@ -6,20 +6,28 @@ const User = require('../model/User.js');
 
 // Get all users
 router.get('/', async (req, res) => {
-	const user = await User.find({});
-	res.send(user);
+	try {
+		const user = await User.find({});
+		res.send(user);
+	} catch (err) {
+		res.status(400).send(err);
+	}
 });
 
 // Get a specific user by ID
 router.get('/:id', async (req, res) => {
-	const user = await User.findById(req.params.id);
-	if (!user) {
-		return res.status(400).json({
-			error: 'There is no user with this ID'
-		});
-	}
+	try {
+		const user = await User.findById(req.params.id);
+		if (!user) {
+			return res.status(400).json({
+				error: 'There is no user with this ID'
+			});
+		}
 
-	res.send(user);
+		res.send(user);
+	} catch (err) {
+		res.status(400).send(err);
+	}
 });
 
 // Create new user
@@ -84,7 +92,21 @@ router.post('/auth', async (req, res) => {
 		process.env.TOKEN_SECRET
 	);
 
-	res.header('Auth-Token', token).send(token);
+	res.cookie(
+		'Auth-Token',
+		token,
+		{
+			httpOnly: true
+		}
+	).json({
+		message: 'Authorization was successfull'
+	});
+});
+
+router.post('/logout', (req, res) => {
+	res.clearCookie('Auth-Token').json({
+		message: 'Logged out'
+	});	
 });
 
 module.exports = router;
