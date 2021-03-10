@@ -111,11 +111,7 @@ view msgMapper sharedState model =
                     "404"
         
         body_ =
-            main_ [ class sharedState.theme ]
-                [ a [ href "/" ] [ text "Home" ]
-                , a [ href "/settings" ] [ text "Settings" ]
-                , pageView sharedState model
-                ]
+            main_ [ class sharedState.theme ] [ pageView sharedState model ]
     in
         { title = title
         , body = body_ |> Html.map msgMapper |> \x -> [ x ]

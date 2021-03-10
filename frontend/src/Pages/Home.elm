@@ -1,28 +1,25 @@
 module Pages.Home exposing (Model, Msg(..), init, update, view)
 
+import Components.SVGs.ViziblyLogo exposing (viewViziblyLogo)
 import Html exposing (..)
-import Html.Events exposing (..)
+import Html.Attributes exposing (..)
 import SharedState exposing (SharedState)
 
 type alias Model =
-    { counter : Int }
+    {}
 
 type Msg
-    = Increment
-    | Decrement
+    = NoOp
 
 init : Model
 init =
-    { counter = 0 }
+    {}
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Increment ->
-            ( { model | counter = model.counter + 1 }, Cmd.none )
-
-        Decrement ->
-            ( { model | counter = model.counter - 1 }, Cmd.none )
+        NoOp ->
+            ( model, Cmd.none )
 
 view : SharedState -> Model -> Html Msg
 view sharedState model =
@@ -31,8 +28,23 @@ view sharedState model =
             text "You are authorized"
 
         Nothing ->
-            div []
-                [ button [ onClick Increment ] [ text "+" ]
-                , p [] [ text (String.fromInt model.counter) ]
-                , button [ onClick Decrement ] [ text "-" ]
+            viewLandingPage
+
+viewLandingPage : Html Msg
+viewLandingPage =
+    div [ class "landing-page" ]
+        [ viewViziblyLogo
+        , h1 [ class "landing-page__slogan" ] [ text "Fast. Simple. Start using it today!" ]
+        , div [ class "landing-page__buttons" ]
+            [ a
+                [ href "/register"
+                , class "landing-page__button--primary"
                 ]
+                [ text "Get Started" ]
+            , a
+                [ href "/login"
+                , class "landing-page__button--secondary"
+                ]
+                [ text "I already have an account" ]
+            ]
+        ]

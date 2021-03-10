@@ -1,0 +1,63 @@
+@import '../Mixins/breakpoint';
+@import '../Mixins/darken-hover';
+
+.landing-page {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 90%;
+	max-width: 700px;
+	margin: 0 auto;
+	
+	svg {
+		display: block;
+	}
+}
+
+.landing-page__slogan {
+	font-size: 35px;
+	font-weight: 700;
+	text-align: center;
+	margin: 65px 0;
+}
+
+a[class^=landing-page__button] {
+	display: block;
+	font-size: 19px;
+	font-weight: 700;
+	color: rgb(255, 255, 255);
+	text-transform: uppercase;
+	text-align: center;
+	text-decoration: none;
+	padding: 15px 0;
+	border-radius: 25px;
+	transition: background-color .25s;
+
+	&:first-child {
+		margin-bottom: 15px;
+	}
+
+	@at-root svg, & {
+		width: 85%;
+		max-width: 350px;
+		margin: 0 auto;
+	}
+
+	@include breakpoint(500) {
+		font-size: 16px;
+		padding: 13px 0;
+	}
+
+	@include breakpoint(350) {
+		font-size: 13px;
+		padding: 10px 0;
+	}
+}
+
+.landing-page__button--primary {
+	@include darken-hover($primary-color);
+}
+
+.landing-page__button--secondary {
+	@include darken-hover(rgba(255, 255, 255, .1));
+}

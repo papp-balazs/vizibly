@@ -1,0 +1,7 @@
+@mixin darken-hover($baseColor, $percentage: 5%) {
+	background-color: $baseColor;
+
+	&:hover {
+		background-color: darken($baseColor, $percentage);
+	}
+}

@@ -4,3 +4,21 @@
 	border: 0;
 	box-sizing: border-box;
 }
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font: 400 14px 'Roboto', sans-serif;
+}
+
+body,
+main.dark {
+	background-color: $primary-bg-dark;
+	color: $primary-color-dark;
+} 
+
+main {
+	height: 100%;
+}
