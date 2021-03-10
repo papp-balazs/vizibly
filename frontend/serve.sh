@@ -1,1 +1,1 @@
-live-server dist --port=8080 --ignore="scripts" --entry-file=index.html
+live-server dist --port=8080 --ignore="*.js,*.css" --entry-file=index.html
